@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BE MINE FOREVER💍🎀</title>
+
+<!-- fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500&family=Orbitron:wght@500&display=swap" rel="stylesheet">
+
+<style>
+/* ===== RESET ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #050505;
+  color: #f2f2f2;
+  overflow: hidden;
+}
+
+/* ===== LANDING ===== */
+#landing {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f6d6e6;
+  z-index: 10;
+  transition: opacity 0.8s ease;
+}
+
+#landing.hide {
+  opacity: 0;
+  pointer-events: none;
+}
+
+#openBtn {
+  padding: 18px 44px;
+  border-radius: 40px;
+  border: none;
+  background: white;
+  font-size: 18px;
+  cursor: pointer;
+  transition: transform 0.4s ease, opacity 0.4s ease;
+}
+
+#openBtn:hover {
+  transform: scale(1.05);
+}
+
+/* ===== GATES ===== */
+.gate {
+  position: fixed;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  background: #050505;
+  z-index: 5;
+  transition: transform 2.4s cubic-bezier(.77,0,.18,1);
+}
+
+#leftGate { left: 0; }
+#rightGate { right: 0; }
+
+.open #leftGate  { transform: translateX(-100%); }
+.open #rightGate { transform: translateX(100%); }
+
+/* ===== CONTENT ===== */
+#content {
+  position: fixed;
+  inset: 0;
+  background: #050505;
+  opacity: 0;
+  transition: opacity 1.6s ease;
+  overflow-y: auto;
+  padding: 120px 20px 180px;
+}
+
+.show #content {
+  opacity: 1;
+}
+
+/* ===== CLOCK & MUSIC ===== */
+#clock {
+  position: fixed;
+  top: 18px;
+  right: 20px;
+  font-family: 'Orbitron', monospace;
+  font-size: 14px;
+  opacity: 0.7;
+  z-index: 6;
+}
+
+#musicBtn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 1px solid white;
+  background: transparent;
+  color: white;
+  cursor: pointer;
+  opacity: 0.65;
+  z-index: 6;
+}
+
+/* ===== SECTIONS ===== */
+.section {
+  max-width: 650px;
+  margin: 0 auto 90px;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: 1.4s ease;
+}
+
+.section.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.letter {
+  font-family: 'Dancing Script', cursive;
+  font-size: 30px;
+  line-height: 1.75;
+}
+
+.small-line {
+  font-family: 'Dancing Script', cursive;
+  font-size: 22px;
+  opacity: 0.75;
+  margin-bottom: 24px;
+}
+
+.title {
+  font-family: 'Dancing Script', cursive;
+  font-size: 26px;
+  margin-bottom: 32px;
+}
+
+.love-line {
+  font-family: 'Dancing Script', cursive;
+  font-size: 24px;
+  margin: 20px 0;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: 0.9s ease;
+}
+
+.love-line.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.love-line.heavy {
+  margin-top: 34px;
+}
+
+/* ===== FINAL BUTTON ===== */
+.final-btn {
+  margin-top: 44px;
+  padding: 16px 42px;
+  border-radius: 40px;
+  border: 1px solid white;
+  background: transparent;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: transform 0.4s ease, opacity 0.4s ease;
+}
+
+.final-btn:hover {
+  transform: scale(1.05);
+}
+
+/* ===== VIDEO ENDING ===== */
+#videoScene {
+  position: fixed;
+  inset: 0;
+  background: black;
+  z-index: 20;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 2s ease;
+}
+
+#videoScene.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#videoScene video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+#videoOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+#welcome {
+  font-family: 'Dancing Script', cursive;
+  font-size: 36px;
+  opacity: 0;
+  transition: opacity 2.2s ease;
+}
+
+#lockRing {
+  margin-top: 42px;
+  width: 70px;
+  height: 70px;
+  border: 2px solid white;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 26px;
+  opacity: 0.9;
+}
+</style>
+</head>
+
+<body>
+
+<!-- landing -->
+<div id="landing">
+  <button id="openBtn">open</button>
+</div>
+
+<!-- gates -->
+<div id="leftGate" class="gate"></div>
+<div id="rightGate" class="gate"></div>
+
+<!-- ui -->
+<div id="clock">00:00</div>
+<button id="musicBtn">pause</button>
+
+<!-- content -->
+<div id="content">
+
+  <div class="section letter">
+    my princess,<br><br>
+    this is something i made just for you.<br>
+    something soft, quiet, and full of love.
+  </div>
+
+  <div class="section small-line">
+    take your time reading this…
+  </div>
+
+  <div class="section">
+    <div class="small-line">all of the things i love about you, sweetie…</div>
+    <div class="title">💍🎀<3</div>
+
+    <div class="love-line">your smile — it makes me so damn happy and calm.</div>
+    <div class="love-line">your eyes, especially when you look at me like its just so fucking gorgeous.</div>
+    <div class="love-line">your cute, soft, adorable laugh.[I love all of it]</div>
+    <div class="love-line">your comforting, gentle personality.[It's adorable.]</div>
+    <div class="love-line">the way you care for me.[you never stopped<3.]</div>
+    <div class="love-line heavy">how loving you feels like home.[It does every time..</div>
+  </div>
+
+  <div class="section letter">
+    there’s something really Important i've been wanting to ask you,<br>
+    my little angel…
+  </div>
+
+  <div class="section letter">
+    my little cupcake,<br><br>
+    will you be my valentine?..Forever..
+    <br><br>
+    <button class="final-btn" id="alwaysBtn">always</button>
+  </div>
+
+</div>
+
+<!-- video ending -->
+<div id="videoScene">
+  <video src="fireworks.mp4" autoplay muted loop></video>
+  <div id="videoOverlay">
+    <div id="welcome">welcome home, love ❤️</div>
+    <div id="lockRing">🔒</div>
+  </div>
+</div>
+
+<!-- audio -->
+<audio id="music" src="test.mp3" loop></audio>
+
+<script>
+const openBtn   = document.getElementById("openBtn");
+const landing   = document.getElementById("landing");
+const music     = document.getElementById("music");
+const musicBtn  = document.getElementById("musicBtn");
+const alwaysBtn = document.getElementById("alwaysBtn");
+const videoScene = document.getElementById("videoScene");
+const welcome   = document.getElementById("welcome");
+const clock     = document.getElementById("clock");
+
+const sections  = document.querySelectorAll(".section");
+const loveLines = document.querySelectorAll(".love-line");
+
+let playing = true;
+
+/* open */
+openBtn.onclick = () => {
+  landing.classList.add("hide");
+  document.body.classList.add("open");
+
+  setTimeout(() => document.body.classList.add("show"), 1600);
+
+  music.volume = 0;
+  music.play();
+
+  const fade = setInterval(() => {
+    if (music.volume < 0.3) music.volume += 0.02;
+    else clearInterval(fade);
+  }, 120);
+
+  reveal();
+};
+
+function reveal() {
+  let delay = 900;
+  sections.forEach(section => {
+    setTimeout(() => section.classList.add("show"), delay);
+    delay += 1200;
+  });
+
+  let lineDelay = 2600;
+  loveLines.forEach(line => {
+    setTimeout(() => line.classList.add("show"), lineDelay);
+    lineDelay += 700;
+  });
+}
+
+/* clock */
+function updateClock() {
+  const d = new Date();
+  clock.textContent =
+    `${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")}`;
+}
+updateClock();
+setInterval(updateClock, 1000);
+
+/* music toggle */
+musicBtn.onclick = () => {
+  playing ? music.pause() : music.play();
+  musicBtn.textContent = playing ? "play" : "pause";
+  playing = !playing;
+};
+
+/* final transition */
+alwaysBtn.onclick = () => {
+  document.getElementById("content").style.opacity = 0;
+
+  setTimeout(() => {
+    videoScene.classList.add("show");
+    setTimeout(() => welcome.style.opacity = 1, 1600);
+  }, 1200);
+};
+</script>
+
+</body>
+</html>
